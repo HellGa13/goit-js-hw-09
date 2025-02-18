@@ -2,8 +2,11 @@ const formData = {
   email: '',
   message: '',
 };
+
 const form = document.querySelector('.feedback-form');
 form.addEventListener('input', inputChange);
+form.addEventListener('submit', handleSubmit);
+
 function inputChange(event) {
   formData[event.target.name] = event.target.value;
   localStorage.setItem('feedback-form-state', JSON.stringify(formData));
@@ -21,13 +24,19 @@ function populateForm() {
     formData.message = parsedData.message || '';
   }
 }
-populateForm(); 
+populateForm();
 
-form.addEventListener('submit', event => {
-  event.preventDefault(); 
-  console.log(formData); 
+function handleSubmit(event) {
+  event.preventDefault();
+
+  if (!formData.email || !formData.message) {
+    alert('Будь ласка, заповніть усі поля.');
+    return;
+  }
+
+  console.log(formData);
   localStorage.removeItem('feedback-form-state');
   formData.email = '';
   formData.message = '';
   form.reset();
-});
+}
